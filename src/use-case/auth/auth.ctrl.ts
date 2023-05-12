@@ -1,22 +1,22 @@
 import flow from './auth.flow';
 
-export async function login(req, res, next) {
+export async function login(req: any, res: any, next: any) {
     const { username, password } = req.body;
-    const { accessToken, refreshToken } = await flow.login(username, password);
-    res.cookies.set('access-token', accessToken, { httpOnly: true });
-    res.cookies.set('refresh-token', refreshToken, { httpOnly: true });
-    res.sendStatus(201);
+    const token = await flow.login(username, password);
+
+    res.cookie('access-token', token.accessToken);
+    res.cookie('refresh-token', token.refreshToken);
+    res.sendStatus(200);
 }
 
-export async function logout(req, res, next) {
-    res.cookies.set('access-token', null, { httpOnly: true });
+export async function logout(req: any, res: any, next: any) {
+    res.cookie('access-token', null);
+    res.sendStatus(200);
 }
 
-export async function refreshToken(req, res, next) {
-    const refresh_token = req.cookies.get('refresh-token') || '';
-    const accessToken = await flow.refreshToken(refresh_token);
-    res.cookies.set('access-token', accessToken, {
-        httpOnly: true,
-    });
+export async function refreshToken(req: any, res: any, next: any) {
+    const refresh_token = req.cookies['refresh-token'];
+    const access_token = await flow.refreshToken(refresh_token);
+    res.cookie('access-token', access_token);
+    res.sendStatus(200);
 }
-export default { login, logout };

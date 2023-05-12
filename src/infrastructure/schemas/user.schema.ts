@@ -1,7 +1,6 @@
-import { Column, Entity, OneToMany, ManyToMany, JoinTable, Index } from 'typeorm';
-import { Role } from './role.schema';
+import { Entity, Column, Index, ManyToMany, JoinTable } from 'typeorm';
 import { BaseSchema } from './base.schema';
-
+import { Role } from './role.schema';
 @Entity({ name: 'users' })
 export class User extends BaseSchema {
     @Column()
@@ -13,6 +12,9 @@ export class User extends BaseSchema {
 
     @Column({ nullable: true })
     email: string = '';
+
+    @Column()
+    password: string = '';
 
     @Column({ nullable: true })
     last_login?: Date;

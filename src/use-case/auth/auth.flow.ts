@@ -1,11 +1,11 @@
+import { generateToken, getUserNameByToken, verify } from '../../util/bcrypt.util';
 import authService from '../../services/auth.service';
-import { generateToken } from '../../services/bcrypt.service';
 import userService from '../../services/user.service';
 
 class AuthFlow {
-    async login(username, password) {
+    async login(username: string, password: string) {
         const user = await authService.login(username, password);
-        const payload = { id: user.id, username: user.username };
+        const payload = { username: user.username };
         const secretKey = process.env.JWT_SECRET || '';
         const expiresIn = process.env.JWT_EXPIRATION_TIME + 's';
         const accessToken = await generateToken(payload, secretKey, expiresIn);
@@ -13,12 +13,12 @@ class AuthFlow {
         const expiresInForRefreshToken = process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME + 's';
         const refreshToken = await generateToken(payload, secretKeyRefreshToken, expiresInForRefreshToken);
         await authService.setRefreshToken(refreshToken, username);
+        await authService.updateLoginTime(user.username);
         return { accessToken, refreshToken };
     }
-
     async refreshToken(refresh_token: string) {
-        const user = await userService.getUser(refresh_token);
-        const payload = { username: user.username };
+        const username = getUserNameByToken(refresh_token);
+        const payload = { username: username };
         const secretKey = process.env.JWT_SECRET || '';
         const expiresIn = process.env.JWT_EXPIRATION_TIME + 's';
         const accessToken = await generateToken(payload, secretKey, expiresIn);

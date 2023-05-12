@@ -1,17 +1,25 @@
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import { seed } from './infrastructure/seeds';
-import mainRouter from './routers/zindex';
-import * as express from 'express';
-const app = express();
+import express from 'express';
+import mainRouter from './routes';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
+dotenv.config();
+const app = express();
 createConnection()
-    .then(async (connection) => {
-        await connection.runMigrations();
-        await seed(connection);
-        // start server
+    .then(async () => {
         app.use(express.json());
-        app.use('/api', mainRouter);
-        app.listen(8080, () => console.log('server running on port 8080'));
+        app.use(cookieParser());
+        app.use(
+            cors({
+                allowedHeaders: ['Content-Type'],
+                credentials: true,
+                origin: ['http://localhost:4200'],
+            })
+        );
+        app.use(mainRouter);
+        app.listen(5000, '0.0.0.0', () => console.log('server running on port 5000'));
     })
     .catch((error) => console.log(error));

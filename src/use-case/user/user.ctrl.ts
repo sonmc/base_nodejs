@@ -1,6 +1,9 @@
-export async function get(req, res, next) {}
-export async function create(req, res, next) {}
-export async function update(req, res, next) {}
-export async function remove(req, res, next) {}
+import { UserPresenter } from './presenter/user.presenter';
+import flow from './user.flow';
 
-export default { get, create, update };
+export async function getCurrentUser(req: any, res: any, next: any) {
+    const access_token = req.cookies['access-token'];
+    const user = await flow.getCurrentUser(access_token);
+    const userPresenter = new UserPresenter(user);
+    res.json(userPresenter);
+}

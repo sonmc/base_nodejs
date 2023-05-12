@@ -1,30 +1,44 @@
 import { getRepository } from 'typeorm';
+import { compare, hash } from '../util/bcrypt.util';
 import { User } from '../infrastructure/schemas/user.schema';
-import { compare, hash } from './bcrypt.service';
 
 class AuthService {
-    userRepo;
-    constructor() {
-        this.userRepo = getRepository(User);
-    }
     async login(username: string, password: string) {
-        const user = await this.userRepo.getUserByUsername(username);
+        const userRepo = getRepository(User);
+        const user = (await userRepo.findOne({
+            where: {
+                username: username,
+            },
+        })) as User;
         const isMatched = await compare(password, user.password);
         if (user && isMatched) {
-            await this.updateLoginTime(user.username);
             const { password, ...result } = user;
             return result;
         }
-        return null;
+        return user;
     }
 
     async updateLoginTime(username: string) {
-        await this.userRepo.updateLastLogin(username);
+        const userRepo = getRepository(User);
+        const user = (await userRepo.findOne({
+            where: {
+                username: username,
+            },
+        })) as User;
+        user.email = new Date().toDateString();
+        await userRepo.save(user);
     }
 
     async setRefreshToken(refreshToken: string, username: string) {
+        const userRepo = getRepository(User);
+        const user = (await userRepo.findOne({
+            where: {
+                username: username,
+            },
+        })) as User;
         const currentHashedRefreshToken = await hash(refreshToken);
-        await this.userRepo.updateRefreshToken(username, currentHashedRefreshToken);
+        user.hash_refresh_token = currentHashedRefreshToken;
+        await userRepo.save(user);
     }
 }
 
