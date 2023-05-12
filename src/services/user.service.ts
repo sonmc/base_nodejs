@@ -1,45 +1,16 @@
-import { getRepository } from "typeorm";
-import { User } from "../infrastructure/schemas/user.schema";
-import { compare, hash } from "./bcrypt.service";
+import { getRepository } from 'typeorm';
+import { User } from '../infrastructure/schemas/user.schema';
+import { compare, getUserNameByToken } from '../util/bcrypt.util';
 
 class UserService {
-  async login(username: string, password: string) {
-    const userRepo = getRepository(User);
-    const user = (await userRepo.findOne({
-      where: {
-        username: username,
-      },
-    })) as User;
-    const isMatched = await compare(password, user.password);
-    if (user && isMatched) {
-      const { password, ...result } = user;
-      return result;
+    async getUserByUsername(username: string) {
+        const userRepo = getRepository(User);
+        const user = (await userRepo.findOne({
+            relations: ['roles', 'roles.permissions'],
+            where: { username: username },
+        })) as User;
+        return user;
     }
-    return user;
-  }
-
-  async updateLoginTime(username: string) {
-    const userRepo = getRepository(User);
-    const user = (await userRepo.findOne({
-      where: {
-        username: username,
-      },
-    })) as User;
-    user.email = new Date().toDateString();
-    await userRepo.save(user);
-  }
-
-  async setRefreshToken(refreshToken: string, username: string) {
-    const userRepo = getRepository(User);
-    const user = (await userRepo.findOne({
-      where: {
-        username: username,
-      },
-    })) as User;
-    const currentHashedRefreshToken = await hash(refreshToken);
-    user.hash_refresh_token = currentHashedRefreshToken;
-    await userRepo.save(user);
-  }
 }
 
 export default new UserService();

@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm';
 import express from 'express';
 import mainRouter from './routes';
 import cookieParser from 'cookie-parser';
-const cors = require('cors');
+import cors from 'cors';
 
 require('dotenv').config();
 
@@ -16,9 +16,10 @@ createConnection()
             cors({
                 allowedHeaders: ['Content-Type'],
                 credentials: true,
+                origin: ['http://localhost:4200'],
             })
         );
         app.use(mainRouter);
-        app.listen(5000, () => console.log('server running on port 5000'));
+        app.listen(5000, '0.0.0.0', () => console.log('server running on port 5000'));
     })
     .catch((error) => console.log(error));
