@@ -4,9 +4,9 @@ import express from 'express';
 import mainRouter from './routes';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
-require('dotenv').config();
-
+dotenv.config();
 const app = express();
 createConnection()
     .then(async () => {
