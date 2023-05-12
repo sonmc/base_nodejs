@@ -1,8 +1,8 @@
 import { getRepository } from "typeorm";
-import { User } from "../infrastructure/schemas/user.schema";
 import { compare, hash } from "./bcrypt.service";
+import { User } from "infrastructure/schemas/user.schema";
 
-class UserService {
+class AuthService {
   async login(username: string, password: string) {
     const userRepo = getRepository(User);
     const user = (await userRepo.findOne({
@@ -42,4 +42,4 @@ class UserService {
   }
 }
 
-export default new UserService();
+export default new AuthService();
