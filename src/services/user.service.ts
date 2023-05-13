@@ -10,6 +10,12 @@ class UserService {
         })) as User;
         return { status: 'success', result: user };
     }
+
+    async getAllUser() {
+        const userRepo = getRepository(User);
+        const users = await userRepo.find();
+        return { status: 'success', result: users };
+    }
 }
 
 export default new UserService();
