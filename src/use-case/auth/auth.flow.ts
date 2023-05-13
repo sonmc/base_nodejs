@@ -1,9 +1,10 @@
-import { generateToken, generateRefreshToken, getUserNameByToken, compare } from '../../util/bcrypt.util';
-import authService from '../../services/auth.service';
+import { generateToken, generateRefreshToken, getUserNameByToken, compare } from 'util/bcrypt.util';
+import authService from 'services/auth.service';
 
 class AuthFlow {
     async login(username: string, password: string) {
         const { status, result } = await authService.getUser(username);
+
         if (status === 'error') {
             return { status, result: {} };
         }

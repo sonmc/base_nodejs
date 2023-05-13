@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
-import { hash } from '../util/bcrypt.util';
-import { User } from '../infrastructure/schemas/user.schema';
+import { hash } from 'util/bcrypt.util';
+import { User } from 'infrastructure/schemas/user.schema';
 
 class AuthService {
     async getUser(username: string) {

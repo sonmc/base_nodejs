@@ -13,7 +13,10 @@
         "nodemon": "^2.0.20",
         "ts-node": "3.3.0",
         "ts-node-dev": "^1.1.6",
-        "typescript": "3.3.3333"
+        "typescript": "3.3.3333",
+        "rimraf": "^4.1.2",
+        "tsc": "^2.0.4",
+        "tsconfig-paths": "^4.1.2"
     },
     "dependencies": {
         "bcrypt": "^5.1.0",
@@ -28,9 +31,9 @@
         "typeorm": "0.2.32"
     },
     "scripts": {
-        "start": "nodemon",
+        "dev": "nodemon",
+        "start": "npm run build && node build/index.js",
         "build": "rimraf ./build && tsc",
-        "dev": "tsnd --respawn src/index.ts",
         "init": "npx typeorm init --name typeorm-tutorial --database postgres --docker",
         "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
         "revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",

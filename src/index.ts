@@ -7,7 +7,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import expressListEndpoints from 'express-list-endpoints';
 import { getAllRouter } from 'util/router.util';
-import permService from './services/perm.service';
+import permService from 'services/perm.service';
 
 dotenv.config();
 const app = express();

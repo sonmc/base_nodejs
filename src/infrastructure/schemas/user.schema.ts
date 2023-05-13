@@ -1,7 +1,7 @@
 import { Entity, Column, Index, ManyToMany, JoinTable } from 'typeorm';
 import { BaseSchema } from './base.schema';
 import { Role } from './role.schema';
-@Entity({ name: 'users' })
+@Entity({ name: 'user' })
 export class User extends BaseSchema {
     @Column()
     @Index({ unique: true })

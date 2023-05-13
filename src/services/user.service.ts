@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { User } from '../infrastructure/schemas/user.schema';
+import { User } from 'infrastructure/schemas/user.schema';
 
 class UserService {
     async getUserByUsername(username: string) {
