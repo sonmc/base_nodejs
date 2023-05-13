@@ -1,21 +1,20 @@
 import { getRepository } from 'typeorm';
-import { compare, hash } from '../util/bcrypt.util';
+import { hash } from '../util/bcrypt.util';
 import { User } from '../infrastructure/schemas/user.schema';
 
 class AuthService {
-    async login(username: string, password: string) {
+    async getUser(username: string) {
         const userRepo = getRepository(User);
         const user = (await userRepo.findOne({
             where: {
                 username: username,
             },
         })) as User;
-        const isMatched = await compare(password, user.password);
-        if (user && isMatched) {
-            const { password, ...result } = user;
-            return result;
+        if (user) {
+            return { status: 'success', result: user };
+        } else {
+            return { status: 'error', result: new User() };
         }
-        return user;
     }
 
     async updateLoginTime(username: string) {
@@ -25,8 +24,9 @@ class AuthService {
                 username: username,
             },
         })) as User;
-        user.email = new Date().toDateString();
+        user.last_login = new Date();
         await userRepo.save(user);
+        return { status: 'success', result: user };
     }
 
     async setRefreshToken(refreshToken: string, username: string) {
@@ -38,7 +38,8 @@ class AuthService {
         })) as User;
         const currentHashedRefreshToken = await hash(refreshToken);
         user.hash_refresh_token = currentHashedRefreshToken;
-        await userRepo.save(user);
+        userRepo.save(user);
+        return { status: 'success', result: user };
     }
 }
 

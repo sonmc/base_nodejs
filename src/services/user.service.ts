@@ -8,7 +8,7 @@ class UserService {
             relations: ['roles', 'roles.permissions'],
             where: { username: username },
         })) as User;
-        return user;
+        return { status: 'success', result: user };
     }
 }
 

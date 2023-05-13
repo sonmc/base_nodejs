@@ -2,11 +2,14 @@ import flow from './auth.flow';
 
 export async function login(req: any, res: any, next: any) {
     const { username, password } = req.body;
-    const token = await flow.login(username, password);
-
-    res.cookie('access-token', token.accessToken);
-    res.cookie('refresh-token', token.refreshToken);
-    res.sendStatus(200);
+    const { status, result } = await flow.login(username, password);
+    if (status == 'error') {
+        res.sendStatus(401);
+    } else {
+        res.cookie('access-token', result.accessToken);
+        res.cookie('refresh-token', result.refreshToken);
+        res.sendStatus(200);
+    }
 }
 
 export async function logout(req: any, res: any, next: any) {
@@ -16,7 +19,7 @@ export async function logout(req: any, res: any, next: any) {
 
 export async function refreshToken(req: any, res: any, next: any) {
     const refresh_token = req.cookies['refresh-token'];
-    const access_token = await flow.refreshToken(refresh_token);
-    res.cookie('access-token', access_token);
+    const { status, result } = await flow.refreshToken(refresh_token);
+    res.cookie('access-token', result.accessToken);
     res.sendStatus(200);
 }
