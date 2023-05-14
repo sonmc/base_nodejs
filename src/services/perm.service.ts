@@ -36,7 +36,8 @@ class PermService {
                 id: 'DESC',
             },
         })) as Permission;
-        return perm.id;
+
+        return perm ? perm.id: 0;
     }
 
     async update(perm: Permission) {
