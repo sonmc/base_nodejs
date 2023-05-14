@@ -1,6 +1,8 @@
 import { ConnectionOptions } from 'typeorm';
+import dotenv from "dotenv";
+dotenv.config();
 
-const dataSourceOptions: ConnectionOptions = {
+const dataSource: ConnectionOptions = {
     type: "postgres",
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || "0", 10),
@@ -13,4 +15,4 @@ const dataSourceOptions: ConnectionOptions = {
     migrations: ['src/infrastructure/migrations/*.ts'],
 };
 
-export default dataSourceOptions;
+export default dataSource;
