@@ -1,4 +1,4 @@
-import { generateToken, generateRefreshToken, getUserNameByToken, compare } from 'util/bcrypt.util';
+import { generateAccessToken, generateRefreshToken, getUserNameByToken, compare } from 'util/bcrypt.util';
 import authService from 'services/auth.service';
 
 class AuthFlow {
@@ -13,7 +13,7 @@ class AuthFlow {
             return { status, result: {} };
         }
         const payload = { username: username };
-        const accessToken = await generateToken(payload);
+        const accessToken = await generateAccessToken(payload);
         const refreshToken = await generateRefreshToken(payload);
         await authService.setRefreshToken(refreshToken, username);
         await authService.updateLoginTime(username);
@@ -23,7 +23,7 @@ class AuthFlow {
     async refreshToken(refresh_token: string) {
         const username = getUserNameByToken(refresh_token);
         const payload = { username: username };
-        const accessToken = await generateToken(payload);
+        const accessToken = await generateAccessToken(payload);
         return { status: 'success', result: { accessToken } };
     }
 }
