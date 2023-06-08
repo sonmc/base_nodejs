@@ -1,5 +1,5 @@
 import { getUserNameByToken } from 'util/bcrypt.util';
-import userService from 'services/user.service';
+import userService from 'service/user.service';
 
 class UserFlow {
     async getCurrentUser(acccess_token: string) {

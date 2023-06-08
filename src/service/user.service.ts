@@ -1,21 +1,27 @@
 import { getRepository } from 'typeorm';
-import { User } from 'infrastructure/schemas/user.schema';
+import { User } from '../../database/schemas/user.schema';
 
-class UserService {
-    async getUserByUsername(username: string) {
+export interface IUser {
+    list(): any;
+    getUser(username: string): any;
+}
+export class UserService implements IUser {
+    async getUser(username: string) {
         const userRepo = getRepository(User);
         const user = (await userRepo.findOne({
             relations: ['roles', 'roles.permissions'],
             where: { username: username },
         })) as User;
-        return { status: 'success', result: user };
+        if (user) {
+            return { status: 'success', result: user };
+        } else {
+            return { status: 'error', result: new User() };
+        }
     }
 
-    async getAllUser() {
+    async list() {
         const userRepo = getRepository(User);
         const users = await userRepo.find();
         return { status: 'success', result: users };
     }
 }
-
-export default new UserService();

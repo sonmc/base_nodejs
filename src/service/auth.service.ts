@@ -1,22 +1,13 @@
 import { getRepository } from 'typeorm';
 import { hash } from 'util/bcrypt.util';
-import { User } from 'infrastructure/schemas/user.schema';
+import { User } from '../../database/schemas/user.schema';
 
-class AuthService {
-    async getUser(username: string) {
-        const userRepo = getRepository(User);
-        const user = (await userRepo.findOne({
-            where: {
-                username: username,
-            },
-        })) as User;
-        if (user) {
-            return { status: 'success', result: user };
-        } else {
-            return { status: 'error', result: new User() };
-        }
-    }
+export interface IAuth {
+    updateLoginTime(username: string): any;
+    setRefreshToken(refreshToken: string, username: string): any;
+}
 
+export class AuthService implements IAuth {
     async updateLoginTime(username: string) {
         const userRepo = getRepository(User);
         const user = (await userRepo.findOne({
@@ -42,5 +33,3 @@ class AuthService {
         return { status: 'success', result: user };
     }
 }
-
-export default new AuthService();

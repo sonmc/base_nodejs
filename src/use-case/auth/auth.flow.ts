@@ -1,22 +1,29 @@
+import { IUser } from 'service/user.service';
+import { IAuth } from 'service/auth.service';
 import { generateToken, generateRefreshToken, getUserNameByToken, compare } from 'util/bcrypt.util';
-import authService from 'services/auth.service';
 
-class AuthFlow {
+export class AuthFlow {
+    private userService;
+    private authService;
+    constructor(userService: IUser, authService: IAuth) {
+        this.userService = userService;
+        this.authService = authService;
+    }
     async login(username: string, password: string) {
-        const { status, result } = await authService.getUser(username);
+        const { status, result } = await this.userService.getUser(username);
 
         if (status === 'error') {
             return { status, result: {} };
         }
-        const isMatched = await compare(password, result.password);
+        const user = result;
+        const isMatched = await compare(password, user.password);
         if (!isMatched) {
             return { status, result: {} };
         }
-        const payload = { username: username };
-        const accessToken = await generateToken(payload);
-        const refreshToken = await generateRefreshToken(payload);
-        await authService.setRefreshToken(refreshToken, username);
-        await authService.updateLoginTime(username);
+        const accessToken = await generateToken(user.id);
+        const refreshToken = await generateRefreshToken(user.id);
+        await this.authService.setRefreshToken(refreshToken, username);
+        await this.authService.updateLoginTime(username);
         return { status: 'success', result: { accessToken, refreshToken } };
     }
 
@@ -27,5 +34,3 @@ class AuthFlow {
         return { status: 'success', result: { accessToken } };
     }
 }
-
-export default new AuthFlow();

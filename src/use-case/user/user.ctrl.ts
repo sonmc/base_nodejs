@@ -1,4 +1,4 @@
-import { User } from 'infrastructure/schemas/user.schema';
+import { User } from '../../../database/schemas/user.schema';
 import { UserPresenter } from './presenter/user.presenter';
 import flow from './user.flow';
 

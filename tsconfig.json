@@ -5,11 +5,12 @@
         "module": "commonjs",
         "baseUrl": "src",
         "paths": {
-            "use-case/*": ["use-case/*"],
-            "@schema/*": ["./src/infrastructure/schemas/*"],
-            "@services/*": ["./src/infrastructure/services/*"],
-            "@infrastructure/*": ["./src/infrastructure/*"],
-            "@util/*": ["./src/util/*"]
+            "@use-case/*": ["use-case/*"],
+            "@schemas/*": ["database/schemas/*"],
+            "@services/*": ["database/services/*"],
+            "@infrastructure/*": ["database/*"],
+            "@util/*": ["./src/util/*"],
+            "@routers/*": ["routers/*"]
         },
         "resolveJsonModule": true,
         "allowJs": true,

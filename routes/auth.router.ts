@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { login, refreshToken, logout } from '../use-case/auth/auth.ctrl';
-import { verifyToken } from '../use-case/auth-middleware';
-import { getCurrentUser } from '../use-case/user/user.ctrl';
+import { login, refreshToken, logout } from 'use-case/auth/auth.ctrl';
+import { verifyToken } from 'use-case/auth-middleware';
+import { getCurrentUser } from 'use-case/user/user.ctrl';
 
 const router = Router();
 

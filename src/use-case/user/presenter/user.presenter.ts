@@ -1,4 +1,4 @@
-import { Role } from 'infrastructure/schemas/role.schema';
+import { Role } from '../../../../database/schemas/role.schema';
 
 export class UserPresenter {
     username: string = '';
