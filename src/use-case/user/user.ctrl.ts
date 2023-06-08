@@ -1,8 +1,11 @@
+import { UserService } from 'service/user.service';
 import { User } from '../../../database/schemas/user.schema';
-import { UserPresenter } from './presenter/user.presenter';
-import flow from './user.flow';
+import { UserPresenter } from './user.presenter';
+import { UserFlow } from './user.flow';
+ 
 
 export async function getCurrentUser(req: any, res: any, next: any) {
+    const flow = new UserFlow(new UserService());
     const access_token = req.cookies['access-token'];
     const { status, result } = await flow.getCurrentUser(access_token);
     const userPresenter = new UserPresenter(result);
@@ -10,6 +13,7 @@ export async function getCurrentUser(req: any, res: any, next: any) {
 }
 
 export async function getAllUser(req: any, res: any, next: any) {
+    const flow = new UserFlow(new UserService());
     const { status, result } = await flow.getAllUser();
     const users = result.map((u: User) => {
         return new UserPresenter(u);

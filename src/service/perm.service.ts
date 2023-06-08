@@ -1,16 +1,16 @@
 import { getRepository } from 'typeorm';
-import { Permission } from '../../database/schemas/perm.schema';
+import { PermSchema } from '../../database/schemas/perm.schema';
 
 class PermService {
     async updateFromRouter(routers: any) {
-        const permRepo = getRepository(Permission);
+        const permRepo = getRepository(PermSchema);
         const lastId = await this.getLastId();
         let index = 0;
         routers.forEach(async (r: any) => {
             const perm = await this.isPermExist(r.path);
             index += 1;
             if (perm != null) {
-                const p = new Permission();
+                const p = new PermSchema();
                 p.id = lastId + index;
                 p.label = r.path;
                 permRepo.save(p);
@@ -20,28 +20,28 @@ class PermService {
     }
 
     async isPermExist(name: string) {
-        const permRepo = getRepository(Permission);
+        const permRepo = getRepository(PermSchema);
         const perm = (await permRepo.findOne({
             where: {
                 name: name,
             },
-        })) as Permission;
+        })) as PermSchema;
         return perm;
     }
 
     async getLastId() {
-        const permRepo = getRepository(Permission);
+        const permRepo = getRepository(PermSchema);
         const perm = (await permRepo.findOne({
             order: {
                 id: 'DESC',
             },
-        })) as Permission;
+        })) as PermSchema;
 
         return perm ? perm.id : 0;
     }
 
-    async update(perm: Permission) {
-        const permRepo = getRepository(Permission);
+    async update(perm: PermSchema) {
+        const permRepo = getRepository(PermSchema);
         permRepo.save(perm);
         return { status: 'success', result: perm };
     }

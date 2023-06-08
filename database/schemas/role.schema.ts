@@ -4,7 +4,7 @@ import { User } from './user.schema';
 import { BaseSchema } from './base.schema';
 
 @Entity({ name: 'roles' })
-export class Role extends BaseSchema {
+export class RoleSchema extends BaseSchema {
     @Column()
     name: string = '';
 

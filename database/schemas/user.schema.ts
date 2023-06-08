@@ -1,6 +1,6 @@
 import { Entity, Column, Index, ManyToMany, JoinTable } from 'typeorm';
 import { BaseSchema } from './base.schema';
-import { Role } from './role.schema';
+import { RoleSchema } from './role.schema';
 @Entity({ name: 'user' })
 export class User extends BaseSchema {
     @Column()
@@ -22,11 +22,11 @@ export class User extends BaseSchema {
     @Column({ nullable: true })
     hash_refresh_token: string = '';
 
-    @ManyToMany(() => Role, (role) => role.users)
+    @ManyToMany(() => RoleSchema, (role) => role.users)
     @JoinTable({
         name: 'users_roles',
         joinColumn: { name: 'user_id', referencedColumnName: 'id' },
         inverseJoinColumn: { name: 'role_id' },
     })
-    roles: Role[] | undefined;
+    roles: RoleSchema[] | undefined;
 }
