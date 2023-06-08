@@ -7,10 +7,8 @@
         "paths": {
             "@use-case/*": ["use-case/*"],
             "@schemas/*": ["database/schemas/*"],
-            "@services/*": ["database/services/*"],
-            "@infrastructure/*": ["database/*"],
-            "@util/*": ["./src/util/*"],
-            "@routers/*": ["routers/*"]
+            "@services/*": ["services/*"],
+            "@util/*": ["util/*"]
         },
         "resolveJsonModule": true,
         "allowJs": true,
